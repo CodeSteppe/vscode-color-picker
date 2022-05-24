@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VSCode Color Picker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="color-picker">
+    <div class="picker-head">
+      <div class="brightness-icon"></div>
+      <div class="color-string" title="Click to toggle color options(rgb/hsl/hex)"></div>
+    </div>
+    <div class="picker-body">
+      <div class="saturation-box">
+        <div class="saturation-picker"></div>
+        <canvas class="saturation-canvas"></canvas>
+      </div>
+      <div class="strips">
+        <div class="strip alpha">
+          <div class="slider"></div>
+        </div>
+        <div class="strip hue">
+          <div class="slider"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./tinycolor-min.js"></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>
