@@ -1,9 +1,19 @@
+const colorTypes = ['hex', 'rgb', 'hsl'];
+
+// states
 let currentColor;
 let hue = 0;
 let saturation = 1;
 let brightness = 1;
 let alpha = 1;
+let currentColorType = 'hex';
+let pickingSaturation = false;
+let pickingAlpha = false;
+let pickingHue = false;
 
+let pickingSaturationHandler, pickingAlphaHandler, pickingHueHandler;
+
+// DOM
 const canvas = document.querySelector('.saturation-canvas');
 const canvasRect = canvas.getBoundingClientRect();
 // head
@@ -39,98 +49,153 @@ function drawSaturationColor() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-const setCurrentColor = () => {
-  currentColor = tinycolor(`hsva(${hue}, ${saturation * 100}%, ${brightness * 100}%, ${alpha}`);
-  const hexString = currentColor.toHexString();
-  const hex8String = currentColor.toHex8String();
-  document.body.style.backgroundColor = hex8String;
-  if (currentColor.getAlpha() === 1) {
-    colorString.textContent = hexString;
-  } else {
-    colorString.textContent = hex8String;
+const setColorString = () => {
+  let str = '';
+  const opaque = currentColor.getAlpha() === 1;
+  switch (currentColorType) {
+    case 'hex':
+      str = opaque ? currentColor.toHexString() : currentColor.toHex8String();
+      break;
+    case 'rgb':
+      str = currentColor.toRgbString();
+      break;
+    case 'hsl':
+      str = currentColor.toHslString();
+      break;
+    default:
+      break;
+  }
+  if (str) {
+    colorString.textContent = str;
   }
 }
 
-setCurrentColor();
-drawSaturationColor();
-
-// handle saturation, brightness
-const onSaturationMove = e => {
-  const { offsetX, offsetY, target } = e;
-  if (target !== canvas) return;
-  saturationPicker.style.left = offsetX + 'px';
-  saturationPicker.style.top = offsetY + 'px';
-  const xRatio = offsetX / canvasRect.width;
-  const yRatio = offsetY / canvasRect.height;
-  // console.log(xRatio, yRatio);
+const setCurrentColor = () => {
   /**
    * hsv: hue, saturation, value(brightness)
    * hue: degree
    * saturation: 0-1, 0=gray, 1=primary color
    * value: 0-1, 0=black, 1=brightest
    */
-  saturation = xRatio;
-  brightness = 1 - yRatio;
-  setCurrentColor();
+  currentColor = tinycolor(`hsva(${hue}, ${saturation * 100}%, ${brightness * 100}%, ${alpha}`);
+  document.body.style.backgroundColor = currentColor.toHex8String();
+  setColorString();
 }
 
+setCurrentColor();
+drawSaturationColor();
+
+// handle saturation, brightness
 saturationBox.addEventListener('mousedown', e => {
-  saturationBox.addEventListener('mousemove', onSaturationMove);
+  handleMousemove(
+    saturationBox,
+    ({ x, y, xRatio, yRatio }) => {
+      saturationPicker.style.left = x + 'px';
+      saturationPicker.style.top = y + 'px';
+      saturation = xRatio;
+      brightness = 1 - yRatio;
+      setCurrentColor();
+    },
+    (handler) => {
+      pickingSaturationHandler = handler
+    }
+  )
 });
 
-saturationBox.addEventListener('mouseup', e => {
-  saturationBox.removeEventListener('mousemove', onSaturationMove);
-});
-
-saturationBox.addEventListener('mouseleave', e => {
-  saturationBox.removeEventListener('mousemove', onSaturationMove);
+window.addEventListener('mouseup', e => {
+  window.removeEventListener('mousemove', pickingSaturationHandler);
 });
 
 // handle alpha
-const onAlphaMove = e => {
-  const { offsetX, offsetY, target } = e;
-  if (target !== alphaStrip) return;
-  alphaSlider.style.top = offsetY + 'px';
-  const yRatio = offsetY / alphaStripRect.height;
-  alpha = 1 - yRatio;
-  setCurrentColor();
-}
-
 alphaStrip.addEventListener('mousedown', e => {
-  alphaStrip.addEventListener('mousemove', onAlphaMove);
+  handleMousemove(
+    alphaStrip,
+    ({ y, yRatio }) => {
+      alphaSlider.style.top = y + 'px';
+      alpha = 1 - yRatio;
+      setCurrentColor();
+    },
+    (handler) => {
+      pickingAlphaHandler = handler;
+    }
+  )
 });
 
-alphaStrip.addEventListener('mouseup', e => {
-  alphaStrip.removeEventListener('mousemove', onAlphaMove);
+window.addEventListener('mouseup', e => {
+  window.removeEventListener('mousemove', pickingAlphaHandler);
 });
-
-alphaStrip.addEventListener('mouseleave', e => {
-  alphaStrip.removeEventListener('mousemove', onAlphaMove);
-});
-
 
 // handle hue
-const onHueMove = e => {
-  const { offsetX, offsetY, target } = e;
-  if (target !== hueStrip) return;
-  hueSlider.style.top = offsetY + 'px';
-  const yRatio = offsetY / hueStripRect.height;
-  hue = yRatio * 360;
-  drawSaturationColor();
-  setCurrentColor();
-}
-
 hueStrip.addEventListener('mousedown', e => {
-  hueStrip.addEventListener('mousemove', onHueMove);
+  handleMousemove(
+    hueStrip,
+    ({ y, yRatio }) => {
+      hueSlider.style.top = y + 'px';
+      hue = yRatio * 360;
+      drawSaturationColor();
+      setCurrentColor();
+    },
+    (handler) => {
+      pickingHueHandler = handler;
+    }
+  )
 });
 
-hueStrip.addEventListener('mouseup', e => {
-  hueStrip.removeEventListener('mousemove', onHueMove);
+window.addEventListener('mouseup', e => {
+  window.removeEventListener('mousemove', pickingHueHandler);
 });
 
-hueStrip.addEventListener('mouseleave', e => {
-  hueStrip.removeEventListener('mousemove', onHueMove);
-});
+// toggle color string
+colorString.addEventListener('click', () => {
+  let index = colorTypes.indexOf(currentColorType);
+  if (index < colorTypes.length - 1) {
+    index++;
+  } else {
+    index = 0;
+  }
+  currentColorType = colorTypes[index];
+  setColorString();
+}, []);
 
+/**
+ * handle mouse move
+ * get mouse position in target 
+ */
+function handleMousemove(target, callback, onHandlerCreate) {
+  const rect = target.getBoundingClientRect();
+  const { left, top, width, height } = rect;
+  const handler = e => {
+    const { clientX, clientY } = e;
+    let x = clientX - left;
+    let y = clientY - top;
+    let xRatio, yRatio;
+    if (x <= 0) {
+      xRatio = 0;
+      x = 0;
+    } else if (x > width) {
+      xRatio = 1
+      x = width;
+    } else {
+      xRatio = x / width;
+    }
 
+    if (y <= 0) {
+      yRatio = 0;
+      y = 0;
+    } else if (y > height) {
+      yRatio = 1;
+      y = height;
+    } else {
+      yRatio = y / height;
+    }
 
+    callback({
+      x,
+      y,
+      xRatio,
+      yRatio
+    });
+  }
+  onHandlerCreate(handler)
+  window.addEventListener('mousemove', handler);
+}
