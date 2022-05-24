@@ -1,7 +1,7 @@
 /* global */
 :root {
-  --picker-width: 600px;
-  --picker-height: 400px;
+  --picker-width: 800px;
+  --picker-height: calc(var(--picker-width) * 0.66);
   --head-height: calc(var(--picker-height) * 0.12);
   --color-font-size: calc(var(--head-height) / 2);
   --body-padding: calc(var(--picker-height) * 0.03);
