@@ -38,10 +38,19 @@ body {
   height: var(--head-height);
   background-color: #151515;
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 24%;
+  padding-left: var(--body-padding);
   color: #fff;
   font-size: var(--color-font-size);
+}
+
+.brightness-icon {
+  width: calc(var(--head-height) / 2);
+  height: calc(var(--head-height) / 2);
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: linear-gradient(to right, #000 0%, #000 50%, #fff 50%, #fff 100%);
 }
 
 .color-string {
@@ -99,14 +108,16 @@ body {
 }
 
 .strip.hue {
-  background: linear-gradient(to bottom,
-      #ff0000 0%,
-      #ffff00 17%,
-      #00ff00 33%,
-      #00ffff 50%,
-      #0000ff 67%,
-      #ff00ff 83%,
-      #ff0000 100%);
+  background: linear-gradient(
+    to bottom,
+    #ff0000 0%,
+    #ffff00 17%,
+    #00ff00 33%,
+    #00ffff 50%,
+    #0000ff 67%,
+    #ff00ff 83%,
+    #ff0000 100%
+  );
 }
 
 .strip .slider {

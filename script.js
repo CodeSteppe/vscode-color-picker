@@ -17,7 +17,9 @@ let pickingSaturationHandler, pickingAlphaHandler, pickingHueHandler;
 const canvas = document.querySelector('.saturation-canvas');
 const canvasRect = canvas.getBoundingClientRect();
 // head
+const head = document.querySelector('.picker-head');
 const colorString = document.querySelector('.color-string');
+const brightnessIcon = document.querySelector('.brightness-icon');
 // body
 const saturationBox = document.querySelector('.saturation-box');
 const saturationPicker = document.querySelector('.saturation-picker');
@@ -78,8 +80,11 @@ const setCurrentColor = () => {
    * value: 0-1, 0=black, 1=brightest
    */
   currentColor = tinycolor(`hsva(${hue}, ${saturation * 100}%, ${brightness * 100}%, ${alpha}`);
-  document.body.style.backgroundColor = currentColor.toHex8String();
   setColorString();
+  head.style.backgroundColor = currentColor.toHex8String();
+  const isDarkColor = brightness < 0.5;
+  colorString.style.color = isDarkColor ? '#fff' : '#000';
+  brightnessIcon.style.filter = isDarkColor ? 'invert(1)' : 'invert(0)';
 }
 
 setCurrentColor();
