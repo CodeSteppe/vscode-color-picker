@@ -1,4 +1,4 @@
-const colorTypes = ['hex', 'rgb', 'hsl'];
+const colorTypes = ['hex', 'rgb', 'hsl', 'hsv'];
 
 // states
 let currentColor;
@@ -64,6 +64,9 @@ const setColorString = () => {
       break;
     case 'hsl':
       str = currentColor.toHslString();
+      break;
+    case 'hsv':
+      str = currentColor.toHsvString();
       break;
     default:
       break;
