@@ -87,9 +87,9 @@ const setCurrentColor = () => {
   setColorString();
   head.style.backgroundColor = currentColor.toHex8String();
   root.style.setProperty('--color', currentColor.toHexString());
-  const isDarkColor = brightness < 0.5;
-  colorString.style.color = isDarkColor ? '#fff' : '#000';
-  brightnessIcon.style.filter = isDarkColor ? 'invert(1)' : 'invert(0)';
+  const isBgDark = brightness < 0.5 || alpha < 0.5;
+  colorString.style.color = isBgDark ? '#fff' : '#000';
+  brightnessIcon.style.filter = isBgDark ? 'invert(1)' : 'invert(0)';
 }
 
 setCurrentColor();
