@@ -37,7 +37,7 @@ body {
 .picker-head {
   height: var(--head-height);
   background: url("./opacity-background.png");
-  background-size: 9px 9px;
+  background-size: 16px 16px;
   image-rendering: pixelated;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ body {
 
 .strip.alpha {
   background: url("./opacity-background.png");
-  background-size: 9px 9px;
+  background-size: 16px 16px;
   image-rendering: pixelated;
 }
 
