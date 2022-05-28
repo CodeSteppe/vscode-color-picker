@@ -1,18 +1,20 @@
-/* global */
 :root {
   --picker-width: 800px;
   --picker-height: calc(var(--picker-width) * 0.66);
   --head-height: calc(var(--picker-height) * 0.12);
+  --head-padding: calc(var(--picker-height) * 0.03);
   --color-font-size: calc(var(--head-height) / 2);
-  --body-padding: calc(var(--picker-height) * 0.03);
+  --body-padding: var(--head-padding);
   --strip-width: calc(var(--picker-height) / 8);
+  --hex-color: "#ff0000";
+  --hex8-color: "#ff0000ff";
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Segoe UI, Verdana, Helvetica, Sans-Serif;
+  font-family: Segoe UI;
 }
 
 body {
@@ -36,13 +38,13 @@ body {
 /* head */
 .picker-head {
   height: var(--head-height);
-  background: url("./opacity-background.png");
+  background: url(./opacity-background.png) var(--hex8-color);
   background-size: 16px 16px;
   image-rendering: pixelated;
   display: flex;
   align-items: center;
   gap: 24%;
-  padding-left: var(--body-padding);
+  padding-left: var(--head-padding);
   color: #fff;
   font-size: var(--color-font-size);
 }
@@ -57,10 +59,10 @@ body {
 
 .color-string {
   cursor: pointer;
-  mix-blend-mode: luminosity;
 }
 
 /* body */
+
 .picker-body {
   display: flex;
   gap: 16px;
@@ -68,7 +70,6 @@ body {
   padding: var(--body-padding);
 }
 
-/* saturation */
 .saturation-box {
   flex-grow: 1;
   position: relative;
@@ -85,17 +86,15 @@ body {
   height: 20px;
   top: 0;
   left: 100%;
-  border: 2px solid rgb(255, 255, 255);
-  border-radius: 100%;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);
+  border: 2px solid #fff;
+  border-radius: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
 }
 
-/* strips */
 .strips {
   display: flex;
-  gap: 16px;
+  gap: 10px;
 }
 
 .strip {
@@ -105,7 +104,7 @@ body {
 }
 
 .strip.alpha {
-  background: url("./opacity-background.png");
+  background: url(./opacity-background.png);
   background-size: 16px 16px;
   image-rendering: pixelated;
 }
@@ -119,7 +118,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(to bottom, var(--color) 0%, transparent 100%);
+  background: linear-gradient(to bottom, var(--hex-color) 0%, transparent 100%);
 }
 
 .strip.hue {
@@ -129,7 +128,7 @@ body {
     #ffff00 17%,
     #00ff00 33%,
     #00ffff 50%,
-    #0000ff 67%,
+    #00ffff 67%,
     #ff00ff 83%,
     #ff0000 100%
   );
@@ -143,9 +142,8 @@ body {
   width: calc(100% + 6px);
   height: 6px;
   border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.85);
 }
 
-.test {
-  color: #ff8400;
-}
+/* .test {
+  color: #ff0000;
+} */
