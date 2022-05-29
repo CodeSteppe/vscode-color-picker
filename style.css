@@ -2,12 +2,8 @@
   --picker-width: 800px;
   --picker-height: calc(var(--picker-width) * 0.66);
   --head-height: calc(var(--picker-height) * 0.12);
-  --head-padding: calc(var(--picker-height) * 0.03);
-  --color-font-size: calc(var(--head-height) / 2);
-  --body-padding: var(--head-padding);
   --strip-width: calc(var(--picker-height) / 8);
-  --hex-color: "#ff0000";
-  --hex8-color: "#ff0000ff";
+  --color: #ff0000;
 }
 
 * {
@@ -35,18 +31,17 @@ body {
   user-select: none;
 }
 
-/* head */
 .picker-head {
   height: var(--head-height);
-  background: url(./opacity-background.png) var(--hex8-color);
+  background: url(./opacity-background.png);
   background-size: 16px 16px;
   image-rendering: pixelated;
   display: flex;
   align-items: center;
   gap: 24%;
-  padding-left: var(--head-padding);
+  padding-left: 20px;
   color: #fff;
-  font-size: var(--color-font-size);
+  font-size: calc(var(--head-height) * 0.6);
 }
 
 .brightness-icon {
@@ -61,13 +56,11 @@ body {
   cursor: pointer;
 }
 
-/* body */
-
 .picker-body {
   display: flex;
   gap: 16px;
   flex-grow: 1;
-  padding: var(--body-padding);
+  padding: 20px;
 }
 
 .saturation-box {
@@ -87,14 +80,15 @@ body {
   top: 0;
   left: 100%;
   border: 2px solid #fff;
-  border-radius: 50%;
+  border-radius: 100%;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);
   position: absolute;
   transform: translate(-50%, -50%);
 }
 
 .strips {
   display: flex;
-  gap: 10px;
+  gap: 16px;
 }
 
 .strip {
@@ -118,7 +112,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(to bottom, var(--hex-color) 0%, transparent 100%);
+  background: linear-gradient(to bottom, var(--color) 0%, transparent 100%);
 }
 
 .strip.hue {
@@ -128,7 +122,7 @@ body {
     #ffff00 17%,
     #00ff00 33%,
     #00ffff 50%,
-    #00ffff 67%,
+    #0000ff 67%,
     #ff00ff 83%,
     #ff0000 100%
   );
@@ -140,10 +134,7 @@ body {
   top: 0;
   left: -3px;
   width: calc(100% + 6px);
-  height: 6px;
+  height: 8px;
   border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);
 }
-
-/* .test {
-  color: #ff0000;
-} */
